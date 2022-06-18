@@ -10,7 +10,7 @@ def getDatabaseWrapperInstance():
         username="sujan079"
         password="hswOC3XWnnWMYJe0"
         database="reddit_db"
-        url=f"mongodb+srv://{username}:{password}@databasecluster.svz8u.mongodb.net/?retryWrites=true&w=majority?ssl=true&ssl_cert_reqs=CERT_NONE"
+        url=f"mongodb+srv://{username}:{password}@databasecluster.svz8u.mongodb.net/"
         client=pymongo.MongoClient(url)
         db=client[database]
         DATABASE_WRAPPER_INSTANCE = DatabaseWrapper(db=db)
