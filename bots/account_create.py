@@ -1,0 +1,150 @@
+import time
+from dependency.captchaResolver.index import getTextToSpeechCaptchaResolver
+from dependency.selenium.Selenium import getSeleniumBrowserAutomation
+
+from dependency.reddit.index import getRedditWrapperInstance
+from dependency.database.index import getDatabaseWrapperInstance
+
+from entities.RedditUser import RedditUser
+
+
+DEFAULT_DELAY=2
+BASE_URL="https://old.reddit.com"
+ACCOUNT_REGISTER=f"{BASE_URL}/register"
+APP_REGISTER_URL=f"{BASE_URL}/prefs/apps/"
+
+def handle_account_creation(browser,reddit_user):
+    browser.get(ACCOUNT_REGISTER)
+
+    #user Input Text
+    username_input=browser.find_element_by_id("user_reg")
+    username_input.send_keys(reddit_user.username)
+
+    time.sleep(DEFAULT_DELAY)
+
+    #password Input Text
+    password_input=browser.find_element_by_id("passwd_reg")
+    password_input.send_keys(reddit_user.password)
+
+    time.sleep(DEFAULT_DELAY)
+    
+    #verify password Input Text
+    verify_password_input = browser.find_element_by_id("passwd2_reg")
+    verify_password_input.send_keys(reddit_user.password)
+
+    time.sleep(DEFAULT_DELAY)
+
+
+    #Resolving Captcha
+    captchaSolver=getTextToSpeechCaptchaResolver(browserWrapper=browser)
+    captchaSolver.resolve()
+
+    time.sleep(DEFAULT_DELAY)
+    
+    browser.switch_to.parent_frame()   
+
+
+    sign_up_btn=browser.find_element_by_css_selector("#register-form .c-submit-group .c-btn")
+    sign_up_btn.click()
+    time.sleep(DEFAULT_DELAY)
+
+
+
+def handle_developer_app_creation(browser):
+    
+    browser.get(APP_REGISTER_URL)
+    time.sleep(DEFAULT_DELAY)
+
+    edit_app_button=browser.find_elements_by_css_selector(".edit-app-button")
+    if len(edit_app_button)>0:
+        edit_app_button[0].click()
+    else:    
+        #Create APP Button
+        browser.find_element_by_id("create-app-button").click()
+    
+
+        #Select Script Input Select Type
+        browser.find_element_by_css_selector("[value='script']").click()
+
+        #input name box
+        browser.find_element_by_css_selector("form input[name='name']").send_keys("good application")
+    
+        #description input
+        browser.find_element_by_css_selector("form textarea[name='description']").send_keys("good application")
+
+        #redirect url 
+
+        browser.find_element_by_css_selector("form input[name='redirect_uri']").send_keys("http://127.0.0.1:8000")
+
+        #submit button
+        browser.find_element_by_css_selector("form button[type='submit']").click()
+
+    #getting client Secret and client id
+    time.sleep(DEFAULT_DELAY)
+
+    client_id=browser.find_element_by_css_selector("#developed-apps ul li:first-child .app-details h3:nth-child(3)").text
+    client_secret=browser.find_element_by_css_selector(".edit-app-form table tbody:first-child td").text
+    
+
+    
+    return {
+        "client_id":client_id,
+        "client_secret":client_secret
+    }
+    
+
+
+def handle_login(browser,reddit_user):
+    browser.get(ACCOUNT_REGISTER)
+    time.sleep(DEFAULT_DELAY)
+
+    #user Input Text
+    username_input=browser.find_element_by_id("user_login")
+    username_input.send_keys(reddit_user.username)
+
+    #password Input Text
+    password_input=browser.find_element_by_id("passwd_login")
+    password_input.send_keys(reddit_user.password)
+
+    sign_in_btn=browser.find_element_by_css_selector("#login-form .c-submit-group .c-btn")
+    sign_in_btn.click()
+
+    time.sleep(DEFAULT_DELAY)    
+
+def run():
+    browser=None
+    try:
+        password="Earning$$"
+
+        browser=getSeleniumBrowserAutomation()
+        reddit=getRedditWrapperInstance()
+        db=getDatabaseWrapperInstance()
+
+        username=reddit.get_random_name(browser=getSeleniumBrowserAutomation())
+        reddit_user=RedditUser(username,password)
+
+        print(f"Creating User with username{username}")
+        
+        handle_account_creation(browser=browser,reddit_user=reddit_user)
+        
+        print("Creating reddit application: Getting->Client Id and Client Secret")
+        client_info=handle_developer_app_creation(browser=browser)
+        
+        reddit_user.client_id=client_info["client_id"]
+        reddit_user.client_secret=client_info["client_secret"]
+
+        db.insert("accounts",{
+            "username":reddit_user.username,
+            "password":reddit_user.password,
+            "client_id":reddit_user.client_id,
+            "client_secret":reddit_user.client_secret,
+            "isBanned":False
+        })
+        reddit=getRedditWrapperInstance(username=reddit_user.username,password=reddit_user.password,client_id= reddit_user.client_id,client_secret=reddit_user.client_secret)
+        reddit.pin_to_post(subreddit=reddit_user.username,title="[FREE] Limited time offer. Free full access to all of my contents.",url="https://getunlock.cc/adriana~205726v")
+
+    except Exception as e:
+        print(e)
+    finally:
+        if browser:
+            browser.close()
