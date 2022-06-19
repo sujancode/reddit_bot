@@ -5,8 +5,9 @@ from bots.post_creator import run as post_creator
 def main():
     #account_create()
     # post_creator()
+    # post_creator()
     poster()
-    pass
+    
 main()
 
 

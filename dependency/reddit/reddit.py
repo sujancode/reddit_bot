@@ -4,6 +4,9 @@ class RedditWrapper:
         self.json=json
         self.db=db
 
+    def get_ip(self):
+        return self.reddit._core._requestor._http.proxies
+
     def get_account_banned_status(self):
         return self.reddit.user.me().subreddit.user_is_banned
     
@@ -15,7 +18,7 @@ class RedditWrapper:
         return body["usernames"][0]
 
     def scrape_top_posts_from_subreddit(self,subreddit):
-        subreddit=self.reddit.subreddit(subreddit).hot(limit=25)
+        subreddit=self.reddit.subreddit(subreddit).top("month",limit=25)
         return [item for item in subreddit]
             
 
@@ -36,3 +39,8 @@ class RedditWrapper:
         subreddit=self.reddit.subreddit(f"u_{subreddit}")
         submisson=subreddit.submit(title=title,url=url)
         submisson.mod.sticky()
+    
+    def get_top_post_of_account(self,author):
+        subreddit=self.reddit.subreddit(f"u_{author}").top("month",limit=25)
+        return [item for item in subreddit]
+        

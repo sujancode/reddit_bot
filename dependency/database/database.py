@@ -7,10 +7,18 @@ class DatabaseWrapper:
         collection=self.db[collection]
         return collection.insert_one(data)
 
-    def find_one(self,collection,filter):
+    def find_one(self,collection,filter={}):
         collection=self.db[collection]
         return collection.find_one(filter)
     
-    def find_all(self,collection):
+    def find_all(self,collection,filter={}):
         collection=self.db[collection]
-        return [item for item in collection.find()]
+        return [item for item in collection.find(filter)]
+    
+    def get_distinct(self,collection,field_name):
+        collection=self.db[collection]
+        return [item for item in collection.distinct(field_name)]
+    
+    def update_by_id(self,collection,id,value):
+        collection=self.db[collection]
+        return collection.update_one({"_id":id},{"$set":value})
