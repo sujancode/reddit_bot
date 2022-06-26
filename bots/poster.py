@@ -33,7 +33,7 @@ def run():
         print(author)
         account=db.find_one("accounts",{"author":author})
         print(account)
-        reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'],proxy="110.170.126.13:3128")
+        reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'])
         print("POSTING USING")
         print(f"USERNAME:{account['username']}\nPASSWORD:{account['password']}")
         make_post(author=author,reddit=reddit)

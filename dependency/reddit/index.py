@@ -31,3 +31,5 @@ def getRedditWrapperInstance(username="",password="",client_id="",client_secret=
     if not REDDIT_WRAPPER_INSTANCE:
         REDDIT_WRAPPER_INSTANCE = RedditWrapper(reddit=RedditClient,json=json,db=db) 
     return REDDIT_WRAPPER_INSTANCE
+
+    

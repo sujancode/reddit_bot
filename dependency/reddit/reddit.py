@@ -44,3 +44,12 @@ class RedditWrapper:
         subreddit=self.reddit.subreddit(f"u_{author}").top("month",limit=25)
         return [item for item in subreddit]
         
+    def get_top_subreddit_comments(self,subreddit):
+        comments=self.reddit.subreddit(subreddit).comments(limit=50)
+        return [ comment for comment in comments ]
+    
+    def reply_to_comment(self,comment,text):
+        return comment.reply(text)
+    
+    def get_current_user(self):
+        return self.reddit.user.me()
