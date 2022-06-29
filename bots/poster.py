@@ -34,6 +34,9 @@ def make_post(author,account):
     posted_on=post["posted_on"] #gets the subreddits that the account posted on 
     
     for sub in subreddits:
+        log_data["post"]=post["_id"]
+        log_data["subreddit"]=sub
+        
         if not sub in posted_on:            
             print(f"Posting on {sub}")
             try:
@@ -53,14 +56,12 @@ def make_post(author,account):
             finally:
                 posted_on.append(sub)
                 db.update_by_id(collection="posts",id=post["_id"],value={"posted_on":posted_on})
+                logger.dispatchLog(data=log_data) 
                 return # breaks out of the function
 
         else:
             log_data["message"]=f"Not Posted on {sub} because already posted. Prev Post {posted_on}"
-
-        log_data["post"]=post["_id"]
-        log_data["subreddit"]=sub
-        logger.dispatchLog(data=log_data) 
+            logger.dispatchLog(data=log_data) 
 
 def get_account_active_status(account):
     if account:    
