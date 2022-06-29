@@ -2,12 +2,23 @@ from ast import While
 from math import fabs
 import random
 import time
+from dependency.logger.index import getLoggerInstance
 from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
 
 
 
 def make_post(author,account):
+    logger=getLoggerInstance("poster_logger")
+    
+    log_data={
+        "username":account["username"],
+        "password":account["password"],
+        "subreddit":"",
+        "post":"",
+        "date":"",
+        "message":""
+    }
 
     reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'])
     print("POSTING USING")
@@ -25,22 +36,28 @@ def make_post(author,account):
     posted_on=post["posted_on"] #gets the subreddits that the account posted on 
     
     for sub in subreddits:
-        if not sub in posted_on:
-
-            print(f"Posting on {sub} using ip {reddit.get_ip()}")
+        if not sub in posted_on:            
+            print(f"Posting on {sub}")
             try:
 
                 if not reddit.get_account_banned_status():
                     reddit.post_with_title_url(subreddit=sub,title=post["title"],url=post["url"])
+                    
+                    log_data["message"]=f"Posted Successfully on {sub}"
 
             except Exception as e:
                 print(f"Error Posting to {sub}\\title:{post['title']}\nurl:{post['url']} ")
-                print(e)
+
+                log_data["message"]=f"Error Posting to {sub}\\title:{post['title']}\nurl:{post['url']} "
+
                 if "403" in str(e):
                     db.update_by_id("accounts",id=account["_id"],value={"isBanned":True})
             finally:
                 posted_on.append(sub)
                 db.update_by_id(collection="posts",id=post["_id"],value={"posted_on":posted_on})
+                log_data["post"]=post["_id"]
+                log_data["subreddit"]=sub
+                logger.dispatchLog(data=log_data)
                 return # breaks out of the function
 
 def get_account_active_status(account):
@@ -62,7 +79,7 @@ def assign_author(author):
 
 def run():
     db=getDatabaseWrapperInstance()
-    
+
     authors=db.get_distinct("posts","author")
     author=random.choice(authors)
 
