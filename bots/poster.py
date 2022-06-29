@@ -5,7 +5,7 @@ import time
 from dependency.logger.index import getLoggerInstance
 from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
-
+from datetime import datetime
 
 
 def make_post(author,account):
@@ -16,7 +16,7 @@ def make_post(author,account):
         "password":account["password"],
         "subreddit":"",
         "post":"",
-        "date":"",
+        "date":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
         "message":""
     }
 
