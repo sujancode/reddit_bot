@@ -32,8 +32,14 @@ class RedditWrapper:
         return self.db.find_all(collection)
     
     def post_with_title_url(self,subreddit,title,url):
-        subreddit=self.reddit.subreddit(subreddit)
-        subreddit.submit(title=title,url=url)
+        account=self.reddit.user.me() 
+        banned= any(account.subreddit.banned())
+
+        if not banned:
+            subreddit=self.reddit.subreddit(subreddit)
+            subreddit.submit(title=title,url=url)
+        else:
+            raise Exception(f"Banned on {subreddit}")
     
     def pin_to_post(self,subreddit,title,url):
         subreddit=self.reddit.subreddit(f"u_{subreddit}")

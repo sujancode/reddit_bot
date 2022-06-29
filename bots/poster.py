@@ -36,6 +36,8 @@ def make_post(author,account):
             except Exception as e:
                 print(f"Error Posting to {sub}\\title:{post['title']}\nurl:{post['url']} ")
                 print(e)
+                if "403" in str(e):
+                    db.update_by_id("accounts",id=account["_id"],value={"isBanned":True})
             finally:
                 posted_on.append(sub)
                 db.update_by_id(collection="posts",id=post["_id"],value={"posted_on":posted_on})
