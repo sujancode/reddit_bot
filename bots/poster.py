@@ -55,13 +55,14 @@ def make_post(author,account):
             finally:
                 posted_on.append(sub)
                 db.update_by_id(collection="posts",id=post["_id"],value={"posted_on":posted_on})
+                return # breaks out of the function
+
         else:
             log_data["message"]=f"Not Posted on {sub} because already posted. Prev Post {posted_on}"
 
         log_data["post"]=post["_id"]
         log_data["subreddit"]=sub
         logger.dispatchLog(data=log_data) 
-        return # breaks out of the function
 
 def get_account_active_status(account):
     if account:    
