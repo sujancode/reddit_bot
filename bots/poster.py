@@ -1,12 +1,9 @@
-from ast import While
-from math import fabs
 import random
-import time
 from dependency.logger.index import getLoggerInstance
 from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
 from datetime import datetime
-
+from ec2_metadata import ec2_metadata
 
 def make_post(author,account):
     logger=getLoggerInstance("poster_logger")
@@ -17,7 +14,8 @@ def make_post(author,account):
         "subreddit":"",
         "post":"",
         "date":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-        "message":""
+        "message":"",
+        "instance_id":ec2_metadata.instance_id
     }
 
     reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'])
