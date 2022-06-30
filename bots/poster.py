@@ -5,6 +5,7 @@ from dependency.database.index import getDatabaseWrapperInstance
 from datetime import datetime
 from ec2_metadata import ec2_metadata
 
+
 def make_post(author,account):
     logger=getLoggerInstance("poster_logger")
     
@@ -81,33 +82,35 @@ def assign_author(author):
     return True
 
 def run():
+    print("Starting Posting")
     db=getDatabaseWrapperInstance()
-
     authors=db.get_distinct("posts","author")
     author=random.choice(authors)
 
-
     account=db.find_one("accounts",{"author":author})
 
+    print(account["username"])
 
     if not account:
         author_assigned=assign_author(author)
         if author_assigned:
             account=db.find_one("accounts",{"author":author})
 
-    while True: 
+    while True:
+        print(f"Current Account {account['username']}->Current Author {author}")
         if get_account_active_status(account=account)==False:
             break
+        author=random.choice(authors)
         account=db.find_one("accounts",{"author":author})
+
     
-    print(f"POSTING Content For {author}")
 
-
-    db.update_by_id(collection="accounts",id=account["_id"],value={"isActive":True}) #represents the bot being active
+    # db.update_by_id(collection="accounts",id=account["_id"],value={"isActive":True}) #represents the bot being active
     
     make_post(author=author,account=account)
     
-    db.update_by_id(collection="accounts",id=account["_id"],value={"isActive":False})#represents the bot being inactive
+    # db.update_by_id(collection="accounts",id=account["_id"],value={"isActive":False})#represents the bot being inactive
 
 
 
+    print("Ended")

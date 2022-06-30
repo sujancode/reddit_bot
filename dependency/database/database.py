@@ -1,9 +1,11 @@
 
 class DatabaseWrapper:
-    def __init__(self,db) -> None:
+    def __init__(self,db,getUniqueId) -> None:
         self.db=db
+        self.getUniqueId=getUniqueId
         
     def insert(self,collection,data):
+        data["_id"]=self.getUniqueId()
         collection=self.db[collection]
         return collection.insert_one(data)
 
