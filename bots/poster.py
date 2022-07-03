@@ -70,8 +70,6 @@ def make_post(author,account):
             continue
 
         pin_to_profile(reddit=reddit,account=account)
-        if not "posted_on" in post:
-            post["posted_on"]=[]
 
         for sub in subreddits:
             log_data["post"]=post["_id"]
