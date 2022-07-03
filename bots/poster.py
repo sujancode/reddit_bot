@@ -1,9 +1,18 @@
 import random
+from turtle import title
 from dependency.logger.index import getLoggerInstance
 from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
 from datetime import datetime
 
+def pin_to_profile(reddit,account):
+    db=getDatabaseWrapperInstance()
+    account["pinned"]=False
+    if "pinned" in account:
+        if not account["pinned"]:
+            print("Pinning")
+            reddit.pin_to_post(subreddit=account["username"],title='Watch me dildo play for free ;)\)',url="https://downloadlocked.com/cl/v/gvxjr")
+            db.update_by_id(collection="accounts",id=account["_id"],value={"pinned":True})
 
 def make_post(author,account):
     logger=getLoggerInstance("poster_logger")
@@ -27,7 +36,7 @@ def make_post(author,account):
     
     post=random.choice(posts)
 
-    
+    pin_to_profile(reddit=reddit,account=account)
     if not "posted_on" in post:
         post["posted_on"]=[]
 
