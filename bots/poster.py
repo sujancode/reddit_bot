@@ -37,7 +37,7 @@ def pin_to_profile(reddit,account):
     
     if not account["pinned"]:
         print("Pinning")
-        reddit.pin_to_post(subreddit=account["username"],title='My free pussy play videos for you 💋',url="https://downloadlocked.com/cl/v/gvxjr")
+        reddit.pin_to_post(subreddit=account["username"],title='My free pussy play videos for you 💋',url="https://downloadlocked.com/fl/3qy32")
         db.update_by_id(collection="accounts",id=account["_id"],value={"pinned":True})
 
 def make_post(author,account):
