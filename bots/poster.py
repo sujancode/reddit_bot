@@ -66,10 +66,9 @@ def make_post(author,account):
             posted_on=post["posted_on"] #gets the subreddits that the account posted on 
         print(f"Previous Posts{posted_on}")
 
-        if len(subreddits) == len(posted_on):
-            continue
-
         pin_to_profile(reddit=reddit,account=account)
+
+
 
         for sub in subreddits:
             log_data["post"]=post["_id"]
