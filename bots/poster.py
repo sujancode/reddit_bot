@@ -61,7 +61,9 @@ def make_post(author,account):
     posts=db.find_all("posts",{"author":author})
     for post in posts:    
         print(post["title"])
-        posted_on=post["posted_on"] #gets the subreddits that the account posted on 
+        posted_on=[]
+        if "posted_on" in post:
+            posted_on=post["posted_on"] #gets the subreddits that the account posted on 
         print(f"Previous Posts{posted_on}")
 
         if len(subreddits) == len(posted_on):
