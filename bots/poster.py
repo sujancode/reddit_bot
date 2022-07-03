@@ -3,7 +3,6 @@ from dependency.logger.index import getLoggerInstance
 from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
 from datetime import datetime
-from ec2_metadata import ec2_metadata
 
 
 def make_post(author,account):
@@ -15,8 +14,7 @@ def make_post(author,account):
         "subreddit":"",
         "post":"",
         "date":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-        "message":"",
-        "instance_id":ec2_metadata.instance_id
+        "message":""
     }
 
     reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'])
@@ -75,9 +73,16 @@ def get_account_active_status(account):
 def assign_author(author):
     print(f"Assigning {author} to a account")
     db=getDatabaseWrapperInstance()
-    accounts=db.find_all(collection="accounts",filter={"author":""})
+    accounts=db.find_all(collection="accounts")
     account=random.choice(accounts)
-    db.update_by_id(collection="account",id=account["_id"],value={"author":author})
+    while True:
+        if not "author" in account:
+            break 
+        if "author" in account:
+            if not account["author"]:
+                break
+        account=random.choice(accounts)
+    db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
     print(f"Assigning {author} to a account {account['username']}")
 
     return True

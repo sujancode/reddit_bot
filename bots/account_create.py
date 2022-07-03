@@ -141,7 +141,6 @@ def run():
             "isBanned":False
         })
         reddit=getRedditWrapperInstance(username=reddit_user.username,password=reddit_user.password,client_id= reddit_user.client_id,client_secret=reddit_user.client_secret)
-        reddit.pin_to_post(subreddit=reddit_user.username,title="[FREE] Limited time offer. Free full access to all of my contents.",url="https://getunlock.cc/adriana~205726v")
 
     except Exception as e:
         print(e)
