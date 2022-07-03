@@ -4,8 +4,8 @@ from bots.post_creator import run as post_creator
 from bots.commenter import run as commentor
 def main():
     #account_create()
-    # post_creator()
-    poster()
+    post_creator()
+    # poster()
 
     
 main()

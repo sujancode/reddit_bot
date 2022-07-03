@@ -30,7 +30,7 @@ def run():
         reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'])
         imgur=getImgurWrapperInstance()
 
-        subreddits=["realgirls"]
+        subreddits=["BarelyLegalTeens"]
 
         for sub in subreddits:
             posts=(reddit.scrape_top_posts_from_subreddit(sub))

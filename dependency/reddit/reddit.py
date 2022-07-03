@@ -59,3 +59,9 @@ class RedditWrapper:
     
     def get_current_user(self):
         return self.reddit.user.me()
+    
+    def delete_all_submission(self,username):
+        user=self.reddit.redditor(username)
+        submission=user.submissions.new(limit=None)
+        for sub in submission:
+            sub.delete()
