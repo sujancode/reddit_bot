@@ -5,8 +5,8 @@ from bots.commenter import run as commentor
 def main():
     #account_create()
     # post_creator()
-    # post_creator()
     poster()
+
     
 main()
 
