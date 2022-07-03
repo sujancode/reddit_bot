@@ -7,7 +7,8 @@ from datetime import datetime
 
 def pin_to_profile(reddit,account):
     db=getDatabaseWrapperInstance()
-    account["pinned"]=False
+    if not "pinned" in account:
+        account["pinned"]=False
     if "pinned" in account:
         if not account["pinned"]:
             print("Pinning")
