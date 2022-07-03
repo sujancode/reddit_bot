@@ -29,6 +29,7 @@ def make_post(author,account):
     
     post=random.choice(posts)
 
+    
     if not "posted_on" in post:
         post["posted_on"]=[]
 
@@ -88,8 +89,6 @@ def run():
     author=random.choice(authors)
 
     account=db.find_one("accounts",{"author":author})
-
-    print(account["username"])
 
     if not account:
         author_assigned=assign_author(author)
