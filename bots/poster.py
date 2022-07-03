@@ -1,5 +1,4 @@
 import random
-from turtle import title
 from dependency.logger.index import getLoggerInstance
 from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
@@ -9,11 +8,11 @@ def pin_to_profile(reddit,account):
     db=getDatabaseWrapperInstance()
     if not "pinned" in account:
         account["pinned"]=False
-    if "pinned" in account:
-        if not account["pinned"]:
-            print("Pinning")
-            reddit.pin_to_post(subreddit=account["username"],title='Watch me dildo play for free ;)\)',url="https://downloadlocked.com/cl/v/gvxjr")
-            db.update_by_id(collection="accounts",id=account["_id"],value={"pinned":True})
+    
+    if not account["pinned"]:
+        print("Pinning")
+        reddit.pin_to_post(subreddit=account["username"],title='Watch me dildo play for free ;)\)',url="https://downloadlocked.com/cl/v/gvxjr")
+        db.update_by_id(collection="accounts",id=account["_id"],value={"pinned":True})
 
 def make_post(author,account):
     logger=getLoggerInstance("poster_logger")
@@ -42,7 +41,7 @@ def make_post(author,account):
         post["posted_on"]=[]
 
     posted_on=post["posted_on"] #gets the subreddits that the account posted on 
-    
+    print(f"Previous Posts{posted_on}")
     for sub in subreddits:
         log_data["post"]=post["_id"]
         log_data["subreddit"]=sub
@@ -110,14 +109,8 @@ def run():
         if author_assigned:
             account=db.find_one("accounts",{"author":author})
 
-    while True:
-        print(f"Current Account {account['username']}->Current Author {author}")
-        if get_account_active_status(account=account)==False:
-            break
-        author=random.choice(authors)
-        account=db.find_one("accounts",{"author":author})
+    print(f"Current Account {account['username']}->Current Author {author}")
 
-    
 
     # db.update_by_id(collection="accounts",id=account["_id"],value={"isActive":True}) #represents the bot being active
     
