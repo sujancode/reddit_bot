@@ -102,29 +102,24 @@ def make_post(author,account):
                 log_data["message"]=f"Not Posted on {sub} because already posted. Prev Post {posted_on}"
                 logger.dispatchLog(data=log_data) 
 
-def get_account_active_status(account):
-    if account:    
-        if not "isActive" in account:
-            return False
-        return account["isActive"]
-    return False
-
 def assign_author(author):
     print(f"Assigning {author} to a account")
     db=getDatabaseWrapperInstance()
-    accounts=db.find_all(collection="accounts")
-    account=random.choice(accounts)
-    while True:
-        if not "author" in account:
-            break 
-        if "author" in account:
-            if not account["author"]:
+    accounts=db.find_all(collection="accounts",filter={"author":""})
+    if len(accounts)>0:
+        for account in accounts:
+            if not "author" in account:
+                db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
+                print(f"Assigning {author} to a account {account['username']}") 
                 break
-        account=random.choice(accounts)
-    db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
-    print(f"Assigning {author} to a account {account['username']}")
-
-    return True
+            if "author" in account:
+                if not account["author"]:
+                    db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
+                    print(f"Assigning {author} to a account {account['username']}") 
+                    break
+        return True
+    else:
+        return False
 
 def run():
     print("Starting Posting")
@@ -133,21 +128,19 @@ def run():
     author=random.choice(authors)
 
     account=db.find_one("accounts",{"author":author})
+    
+    if account:
+        print(f"Current Account {account['username']}->Current Author {author}")
+        make_post(author=author,account=account)
 
-    if not account:
+    else:
         author_assigned=assign_author(author)
         if author_assigned:
             account=db.find_one("accounts",{"author":author})
+            make_post(author=author,account=account)
 
-    print(f"Current Account {account['username']}->Current Author {author}")
 
-
-    # db.update_by_id(collection="accounts",id=account["_id"],value={"isActive":True}) #represents the bot being active
     
-    make_post(author=author,account=account)
-    
-    # db.update_by_id(collection="accounts",id=account["_id"],value={"isActive":False})#represents the bot being inactive
-
 
 
     print("Ended")

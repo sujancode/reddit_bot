@@ -24,3 +24,7 @@ class DatabaseWrapper:
     def update_by_id(self,collection,id,value):
         collection=self.db[collection]
         return collection.update_one({"_id":id},{"$set":value})
+    
+    def delete_by_id(self,collection,id):
+        collection=self.db[collection]
+        return collection.delete_one({"_id":id})
