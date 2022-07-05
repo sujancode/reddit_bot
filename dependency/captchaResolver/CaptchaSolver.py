@@ -1,6 +1,6 @@
 import os
 import time
-from .speechToText import get_large_audio_transcription
+from selenium.webdriver.common.by import By
 
 BASE_DIR=os.path.dirname(os.path.realpath(__file__))
 

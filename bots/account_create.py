@@ -6,7 +6,9 @@ from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
 
 from entities.RedditUser import RedditUser
+from dependency.logger.index import getLoggerInstance
 
+from datetime import datetime
 
 DEFAULT_DELAY=2
 BASE_URL="https://old.reddit.com"
@@ -58,7 +60,8 @@ def handle_developer_app_creation(browser):
     edit_app_button=browser.find_elements_by_css_selector(".edit-app-button")
     if len(edit_app_button)>0:
         edit_app_button[0].click()
-    else:    
+    else:
+        time.sleep(DEFAULT_DELAY)    
         #Create APP Button
         browser.find_element_by_id("create-app-button").click()
     
@@ -113,7 +116,16 @@ def handle_login(browser,reddit_user):
 
 def run():
     browser=None
+    log_data={
+        "account":"",
+        "date":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+        "message":[]
+    }
     try:
+        logger=getLoggerInstance("account_logger")
+    
+
+
         password="Earning$$"
 
         browser=getSeleniumBrowserAutomation()
@@ -121,13 +133,19 @@ def run():
         db=getDatabaseWrapperInstance()
 
         username=reddit.get_random_name(browser=getSeleniumBrowserAutomation())
+        log_data["username"]=username
+
         reddit_user=RedditUser(username,password)
 
         print(f"Creating User with username{username}")
+
+        log_data["message"].append("Creating User with username{username}")
         
         handle_account_creation(browser=browser,reddit_user=reddit_user)
         
         print("Creating reddit application: Getting->Client Id and Client Secret")
+        log_data["message"].append("Creating reddit application: Getting->Client Id and Client Secret")
+
         client_info=handle_developer_app_creation(browser=browser)
         
         reddit_user.client_id=client_info["client_id"]
@@ -140,8 +158,13 @@ def run():
             "client_secret":reddit_user.client_secret,
             "isBanned":False
         })
+        log_data["message"].append("Success")
+
+        logger.dispatchLog(log_data)
     except Exception as e:
         print(e)
+        log_data["message"].append(str(e))
+
     finally:
         if browser:
             browser.close()
