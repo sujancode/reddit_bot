@@ -126,11 +126,10 @@ def run():
         "date":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
         "message":[]
     }
+    logger=getLoggerInstance("account_logger")
+
     try:
-        logger=getLoggerInstance("account_logger")
     
-
-
         password="Earning$$"
 
         browser=getSeleniumBrowserAutomation()
@@ -171,9 +170,11 @@ def run():
     except Exception as e:
         print(e)
         log_data["message"].append(str(e))
+        logger.dispatchLog(log_data)
 
     finally:
         if browser:
             browser.close()
             stop_instance()
+            
 
