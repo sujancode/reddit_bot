@@ -175,6 +175,6 @@ def run():
     finally:
         if browser:
             browser.close()
-            stop_instance()
+        stop_instance()
             
 
