@@ -140,11 +140,13 @@ def run():
         print(f"Creating User with username{username}")
 
         log_data["message"].append("Creating User with username{username}")
+        logger.dispatchLog(log_data)
         
         handle_account_creation(browser=browser,reddit_user=reddit_user)
         
         print("Creating reddit application: Getting->Client Id and Client Secret")
         log_data["message"].append("Creating reddit application: Getting->Client Id and Client Secret")
+        logger.dispatchLog(log_data)
 
         client_info=handle_developer_app_creation(browser=browser)
         
@@ -159,8 +161,8 @@ def run():
             "isBanned":False
         })
         log_data["message"].append("Success")
-
         logger.dispatchLog(log_data)
+
     except Exception as e:
         print(e)
         log_data["message"].append(str(e))
