@@ -9,6 +9,8 @@ from entities.RedditUser import RedditUser
 from dependency.logger.index import getLoggerInstance
 
 from datetime import datetime
+import os
+
 
 DEFAULT_DELAY=2
 BASE_URL="https://old.reddit.com"
@@ -114,6 +116,9 @@ def handle_login(browser,reddit_user):
 
     time.sleep(DEFAULT_DELAY)    
 
+def stop_instance():
+    os.system("sudo shutdown now -h")
+
 def run():
     browser=None
     log_data={
@@ -170,3 +175,5 @@ def run():
     finally:
         if browser:
             browser.close()
+            stop_instance()
+

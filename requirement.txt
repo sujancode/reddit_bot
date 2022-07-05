@@ -1,6 +1,8 @@
 async-generator==1.10
 attrs==21.4.0
 beautifulsoup4==4.11.1
+boto3==1.24.22
+botocore==1.27.22
 bs4==0.0.1
 certifi==2022.5.18.1
 cffi==1.15.0
@@ -13,6 +15,7 @@ h11==0.13.0
 idna==3.3
 imgur-uploader==0.3.0
 imgurpython==1.1.7
+jmespath==1.0.1
 outcome==1.1.0
 praw==7.6.0
 prawcore==2.3.0
@@ -23,9 +26,12 @@ pymongo==4.1.1
 pyOpenSSL==22.0.0
 pyperclip==1.8.2
 PySocks==1.7.1
+python-dateutil==2.8.2
 python-dotenv==0.20.0
 requests==2.27.1
+s3transfer==0.6.0
 selenium==4.2.0
+six==1.16.0
 sniffio==1.2.0
 sortedcontainers==2.4.0
 soupsieve==2.3.2.post1
