@@ -140,8 +140,6 @@ def run():
             "client_secret":reddit_user.client_secret,
             "isBanned":False
         })
-        reddit=getRedditWrapperInstance(username=reddit_user.username,password=reddit_user.password,client_id= reddit_user.client_id,client_secret=reddit_user.client_secret)
-
     except Exception as e:
         print(e)
     finally:

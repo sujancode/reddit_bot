@@ -9,6 +9,38 @@ class CaptchaSolver:
         self.browserWrapper=browserWrapper
         self.requests=requests
 
+    def audioToText(self,mp3Path,driver):
+        print("1")
+        driver.execute_script('''window.open("","_blank");''')
+        driver.switch_to.window(driver.window_handles[1])
+        print("2")
+        driver.get("https://speech-to-text-demo.ng.bluemix.net/")
+        delayTime = 10
+        # Upload file
+        time.sleep(1)
+        print("3")
+        # Upload file
+        time.sleep(1)
+        root = driver.find_element_by_id('root').find_elements_by_class_name('dropzone _container _container_large')
+        btn = driver.find_element(By.XPATH, '//*[@id="root"]/div/input')
+        btn.send_keys(mp3Path)
+        # Audio to text is processing
+        time.sleep(delayTime)
+        #btn.send_keys(path)
+        print("4")
+        # Audio to text is processing
+        time.sleep(10)
+
+        print("5")
+        text = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[7]/div/div/div').find_elements_by_tag_name('span')
+        print("5.1")
+        result = " ".join( [ each.text for each in text ] )
+        print("6")
+        driver.close()
+        driver.switch_to.window(driver.window_handles[0])
+        print("7")
+        return result
+
     def find_audio_btn(self,driver,allIframes):
         for index in range(len(allIframes)):
             driver.switch_to.default_content()
@@ -58,7 +90,8 @@ class CaptchaSolver:
             try:
                 while True:
                     audio_path=self.download_audio_file(driver,f"1.mp3")
-                    response = get_large_audio_transcription(audio_path)
+                    print(audio_path)
+                    response = self.audioToText(mp3Path=audio_path,driver=driver)
                     
                     driver.switch_to.default_content()
                     iframe = driver.find_elements_by_tag_name('iframe')[audioBtnIndex]

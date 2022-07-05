@@ -4,8 +4,9 @@ from dependency.reddit.index import getRedditWrapperInstance
 db=getDatabaseWrapperInstance()
 
 posted_users=db.get_distinct("poster_logger",field_name="username")
+print(posted_users)
 
-
+# print(posted_users)
 # for user in posted_users:
 #     print(user)
 #     account=db.find_one(collection="accounts",filter={"username":user})
@@ -22,3 +23,5 @@ posted_users=db.get_distinct("poster_logger",field_name="username")
 # for account in db.find_all(collection="accounts"):
 #     print(account)
 #     db.update_by_id(collection="accounts",id=account["_id"],value={"author":""}) 
+
+# print(db.get_distinct("posts",field_name="author"))
