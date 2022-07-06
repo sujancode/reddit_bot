@@ -55,7 +55,7 @@ def make_post(author,account):
         "post":"",
         "date":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
         "message":"",
-        "instance_id":ec2_metadata.instance_id
+        # "instance_id":ec2_metadata.instance_id
     }
 
     reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'])
@@ -110,46 +110,42 @@ def make_post(author,account):
 
 ##This shit no use
 
-# def assign_author(author):
-#     print(f"Assigning {author} to a account")
-#     db=getDatabaseWrapperInstance()
-#     accounts=db.find_all(collection="accounts",filter={"author":""})
-#     if len(accounts)>0:
-#         for account in accounts:
-#             if not "author" in account:
-#                 db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
-#                 print(f"Assigning {author} to a account {account['username']}") 
-#                 break
-#             if "author" in account:
-#                 if not account["author"]:
-#                     db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
-#                     print(f"Assigning {author} to a account {account['username']}") 
-#                     break
-#         return True
-#     else:
-#         return False
+def assign_author(author):
+    print(f"Assigning {author} to a account")
+    db=getDatabaseWrapperInstance()
+    accounts=db.find_all(collection="accounts",filter={"author":""})
+    if len(accounts)>0:
+        for account in accounts:
+            if not "author" in account:
+                db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
+                print(f"Assigning {author} to a account {account['username']}") 
+                break
+            if "author" in account:
+                if not account["author"]:
+                    db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
+                    print(f"Assigning {author} to a account {account['username']}") 
+                    break
+        return True
+    else:
+        return False
 
 def run():
     print("Starting Posting")
     db=getDatabaseWrapperInstance()
     authors=db.get_distinct("posts","author")
     
-    logger=getLoggerInstance("poster_logger")
     
 
-    while True:
-        author=random.choice(authors)
+    author=random.choice(authors)
 
-        account=db.find_one("accounts",{"author":author})
-        log_data={
-            "author":author,
-            "account":account
-        }
-        logger.dispatchLog(log_data)
-        if account:
+    account=db.find_one("accounts",{"author":author})
+
+    if not account:
+        if assign_author(author=author):
+            account=db.find_one("accounts",{"author":author})
             make_post(author=author,account=account)
-            break
-    
+    else:
+        make_post(author=author,account=account)
     stop_instance()
 
 

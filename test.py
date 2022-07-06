@@ -21,7 +21,7 @@ for user in posted_users:
         reddit.delete_all_submission(username=user)
         db.delete_by_id("accounts",id=account["_id"])
     except:
-        print("NO Account")
+        print("No Account")
         
 
 
