@@ -144,16 +144,16 @@ def run():
         if assign_author(author=author):
             account=db.find_one("accounts",{"author":author})
             
-            account["username"]="peanutgirly66"
-            account["client_id"]="2mxcdV1oWRSU3jfYd8Hdww"
-            account["client_secret"]="gcX5dCJs3PcUCgYQLjbs6Vbr1GymxA"
+            account["username"]="nuttybabey"
+            account["client_id"]="FKS_vPnE2fMMJFwIGR5uuw"
+            account["client_secret"]="X-yCckXO0nYojNSN1k65wx4E-UEvFQ"
 
             make_post(author=author,account=account)
     else:
-        account["username"]="peanutgirly66"
-        account["client_id"]="2mxcdV1oWRSU3jfYd8Hdww"
-        account["client_secret"]="gcX5dCJs3PcUCgYQLjbs6Vbr1GymxA"
-
+        account["username"]="nuttybabey"
+        account["client_id"]="FKS_vPnE2fMMJFwIGR5uuw"
+        account["client_secret"]="X-yCckXO0nYojNSN1k65wx4E-UEvFQ"
+        account["password"]="Earning$$"
         account["username"]="peanutgirly66"
         make_post(author=author,account=account)
     stop_instance()
