@@ -3,6 +3,7 @@ from dependency.logger.index import getLoggerInstance
 from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
 from datetime import datetime
+import os
 
 titles=[
     "Every upvote gets a video in your inbox comment to let me know you've done it", 
@@ -29,6 +30,9 @@ titles=[
     "Every upvote gets a video of me rubbing my pussy",
     "EVERY UPVOTE gets 4 free pussy pics, TRY ME"
 ]
+
+def stop_instance():
+    os.system("sudo shutdown now -h")
 
 def pin_to_profile(reddit,account):
     db=getDatabaseWrapperInstance()
@@ -102,24 +106,26 @@ def make_post(author,account):
                 log_data["message"]=f"Not Posted on {sub} because already posted. Prev Post {posted_on}"
                 logger.dispatchLog(data=log_data) 
 
-def assign_author(author):
-    print(f"Assigning {author} to a account")
-    db=getDatabaseWrapperInstance()
-    accounts=db.find_all(collection="accounts",filter={"author":""})
-    if len(accounts)>0:
-        for account in accounts:
-            if not "author" in account:
-                db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
-                print(f"Assigning {author} to a account {account['username']}") 
-                break
-            if "author" in account:
-                if not account["author"]:
-                    db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
-                    print(f"Assigning {author} to a account {account['username']}") 
-                    break
-        return True
-    else:
-        return False
+##This shit no use
+
+# def assign_author(author):
+#     print(f"Assigning {author} to a account")
+#     db=getDatabaseWrapperInstance()
+#     accounts=db.find_all(collection="accounts",filter={"author":""})
+#     if len(accounts)>0:
+#         for account in accounts:
+#             if not "author" in account:
+#                 db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
+#                 print(f"Assigning {author} to a account {account['username']}") 
+#                 break
+#             if "author" in account:
+#                 if not account["author"]:
+#                     db.update_by_id(collection="accounts",id=account["_id"],value={"author":author})
+#                     print(f"Assigning {author} to a account {account['username']}") 
+#                     break
+#         return True
+#     else:
+#         return False
 
 def run():
     print("Starting Posting")
@@ -129,18 +135,9 @@ def run():
 
     account=db.find_one("accounts",{"author":author})
     
-    if account:
-        print(f"Current Account {account['username']}->Current Author {author}")
-        make_post(author=author,account=account)
-
-    else:
-        author_assigned=assign_author(author)
-        if author_assigned:
-            account=db.find_one("accounts",{"author":author})
-            make_post(author=author,account=account)
-
-
+    make_post(author=author,account=account)
     
+    stop_instance()
 
 
     print("Ended")

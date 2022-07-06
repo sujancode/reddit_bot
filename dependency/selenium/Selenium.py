@@ -13,5 +13,5 @@ def getSeleniumBrowserAutomation():
     option.add_argument('--no-sandbox')
     option.add_argument("--disable-dev-shm-usage") 
 
-    driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install(), options=option)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=option)
     return driver

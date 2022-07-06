@@ -162,7 +162,8 @@ def run():
             "password":reddit_user.password,
             "client_id":reddit_user.client_id,
             "client_secret":reddit_user.client_secret,
-            "isBanned":False
+            "isBanned":False,
+            "author":""
         })
         log_data["message"].append("Success")
         logger.dispatchLog(log_data)

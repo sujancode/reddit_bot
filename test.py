@@ -3,8 +3,14 @@ from dependency.reddit.index import getRedditWrapperInstance
 
 db=getDatabaseWrapperInstance()
 
-posted_users=db.get_distinct("poster_logger",field_name="username")
-print(posted_users)
+accounts=db.find_all("accounts")
+
+# for account in accounts:
+#     print(account)
+#     db.update_by_id(collection="accounts",id=account["_id"],value={"author":""})
+
+# posted_users=db.get_distinct("poster_logger",field_name="username")
+# print(posted_users)
 
 # print(posted_users)
 # for user in posted_users:
