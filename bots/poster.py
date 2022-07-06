@@ -137,7 +137,7 @@ def run():
     
 
     author=random.choice(authors)
-    author="Greatmoongirl"
+    author="oheytherehellohi"
     account=db.find_one("accounts",{"author":author})
 
     if not account:
