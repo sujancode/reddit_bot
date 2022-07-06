@@ -4,6 +4,7 @@ from dependency.reddit.index import getRedditWrapperInstance
 from dependency.database.index import getDatabaseWrapperInstance
 from datetime import datetime
 import os
+from ec2_metadata import ec2_metadata
 
 titles=[
     "Every upvote gets a video in your inbox comment to let me know you've done it", 
@@ -53,7 +54,8 @@ def make_post(author,account):
         "subreddit":"",
         "post":"",
         "date":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-        "message":""
+        "message":"",
+        "instance_id":ec2_metadata.instance_id
     }
 
     reddit=getRedditWrapperInstance(username=account['username'],password=account['password'],client_id= account['client_id'],client_secret=account['client_secret'])
@@ -134,8 +136,8 @@ def run():
     author=random.choice(authors)
 
     account=db.find_one("accounts",{"author":author})
-    
-    make_post(author=author,account=account)
+    if account:
+        make_post(author=author,account=account)
     
     stop_instance()
 
