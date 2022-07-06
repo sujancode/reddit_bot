@@ -138,23 +138,14 @@ def run():
 
     author=random.choice(authors)
 
-    account=db.find_one("accounts",{"author":author})
+    account=db.find_one("accounts",{"author":"Goddess-xxx"})
 
     if not account:
         if assign_author(author=author):
             account=db.find_one("accounts",{"author":author})
-            
-            account["username"]="nuttybabey"
-            account["client_id"]="FKS_vPnE2fMMJFwIGR5uuw"
-            account["client_secret"]="X-yCckXO0nYojNSN1k65wx4E-UEvFQ"
-
             make_post(author=author,account=account)
     else:
-        account["username"]="nuttybabey"
-        account["client_id"]="FKS_vPnE2fMMJFwIGR5uuw"
-        account["client_secret"]="X-yCckXO0nYojNSN1k65wx4E-UEvFQ"
-        account["password"]="Earning$$"
-        account["username"]="peanutgirly66"
+
         make_post(author=author,account=account)
     stop_instance()
 
