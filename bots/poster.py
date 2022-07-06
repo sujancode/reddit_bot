@@ -133,11 +133,14 @@ def run():
     print("Starting Posting")
     db=getDatabaseWrapperInstance()
     authors=db.get_distinct("posts","author")
-    author=random.choice(authors)
+    
+    while True:
+        author=random.choice(authors)
 
-    account=db.find_one("accounts",{"author":author})
-    if account:
-        make_post(author=author,account=account)
+        account=db.find_one("accounts",{"author":author})
+        if account:
+            make_post(author=author,account=account)
+            break
     
     stop_instance()
 
