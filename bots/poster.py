@@ -134,10 +134,18 @@ def run():
     db=getDatabaseWrapperInstance()
     authors=db.get_distinct("posts","author")
     
+    logger=getLoggerInstance("poster_logger")
+    
+
     while True:
         author=random.choice(authors)
 
         account=db.find_one("accounts",{"author":author})
+        log_data={
+            "author":author,
+            "account":account
+        }
+        logger.dispatchLog(log_data)
         if account:
             make_post(author=author,account=account)
             break
