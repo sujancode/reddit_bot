@@ -85,7 +85,7 @@ def make_post(author,account):
                 try:
 
                     if not reddit.get_account_banned_status():
-                        title=random.choice(titles)# post["title"]
+                        title= post["title"]
 
                         reddit.post_with_title_url(subreddit=sub,title=title,url=post["url"])
                         
@@ -137,7 +137,6 @@ def run():
     
 
     author=random.choice(authors)
-    author="oheytherehellohi"
     account=db.find_one("accounts",{"author":author})
 
     if not account:
