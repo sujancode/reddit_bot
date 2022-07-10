@@ -2,7 +2,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 from webdriver_manager.core.utils import ChromeType
-
+import random
 def getSeleniumBrowserAutomation():
     
     option = webdriver.ChromeOptions()
@@ -12,6 +12,8 @@ def getSeleniumBrowserAutomation():
     option.add_argument('--disable-gpu') 
     option.add_argument('--no-sandbox')
     option.add_argument("--disable-dev-shm-usage") 
+    options.add_argument(f"window-size={random.randint(1000,2000)},{random.randint(1000,2000)}")
+
 
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=option)
     return driver
