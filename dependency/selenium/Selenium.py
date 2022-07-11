@@ -17,6 +17,8 @@ def getSeleniumBrowserAutomation():
     option.add_argument("--disable-dev-shm-usage") 
     option.add_argument(f"window-size={random.randint(1000,2000)},{random.randint(1000,2000)}")
 
+    option.add_argument('--user-data-dir=/usr/bin/chromedriver')
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=option)
+
+    driver = webdriver.Chrome(options=option)
     return driver

@@ -54,7 +54,7 @@ def handle_account_creation(browser,reddit_user):
 
 
 
-def handle_developer_app_creation(browser):
+def handle_developer_app_creation(browser,username):
     
     browser.get(APP_REGISTER_URL)
     time.sleep(DEFAULT_DELAY)
@@ -72,10 +72,10 @@ def handle_developer_app_creation(browser):
         browser.find_element_by_css_selector("[value='script']").click()
 
         #input name box
-        browser.find_element_by_css_selector("form input[name='name']").send_keys("good application")
+        browser.find_element_by_css_selector("form input[name='name']").send_keys(f"{username} bot")
     
         #description input
-        browser.find_element_by_css_selector("form textarea[name='description']").send_keys("good application")
+        browser.find_element_by_css_selector("form textarea[name='description']").send_keys(f"{username} bot")
 
         #redirect url 
 
@@ -152,7 +152,7 @@ def run():
         log_data["message"].append("Creating reddit application: Getting->Client Id and Client Secret")
         logger.dispatchLog(log_data)
 
-        client_info=handle_developer_app_creation(browser=browser)
+        client_info=handle_developer_app_creation(browser=browser,username=username)
         
         reddit_user.client_id=client_info["client_id"]
         reddit_user.client_secret=client_info["client_secret"]
