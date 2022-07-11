@@ -18,6 +18,5 @@ def getSeleniumBrowserAutomation():
     option.add_argument(f"window-size={random.randint(1000,2000)},{random.randint(1000,2000)}")
 
 
-
-    driver = webdriver.Chrome(options=option)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=option)
     return driver
