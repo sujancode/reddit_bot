@@ -116,8 +116,6 @@ def handle_login(browser,reddit_user):
 
     time.sleep(DEFAULT_DELAY)    
 
-def stop_instance():
-    os.system("sudo shutdown now -h")
 
 def run():
     browser=None
@@ -176,6 +174,5 @@ def run():
     finally:
         if browser:
             browser.close()
-        stop_instance()
             
 
