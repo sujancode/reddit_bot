@@ -25,8 +25,8 @@ print(posted_users)
         
 
 
-for post in db.find_all(collection="posts"):
-    db.update_by_id(collection="posts",id=post["_id"],value={"posted_on":[]}) 
+# for post in db.find_all(collection="posts"):
+#     db.update_by_id(collection="posts",id=post["_id"],value={"posted_on":[]}) 
 
 # for account in db.find_all(collection="accounts"):
 #     print(account)
